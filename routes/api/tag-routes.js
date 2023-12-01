@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
   Tag.findByPk(req.params.id, {
     include: [{ 
       model: Product,
-      include: [ 'id', 'product_name', 'price', 'stock', 'category_id']
+      attributes: ['product_name', 'price', 'stock', 'category_id']
     }],
   })
   .then (tagData => {
