@@ -7,9 +7,12 @@ router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    include: [{ model: Product }],
-  });
-  then (tagData => {
+    include: [{ 
+      model: Product,
+      attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+     }],
+  })
+  .then (tagData => {
   res.status(200).json(tagData);
   })
   .catch (err => {
@@ -23,9 +26,12 @@ router.get('/:id', (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   Tag.findByPk(req.params.id, {
-    include: [{ model: Product }],
-  });
-  then (tagData => {
+    include: [{ 
+      model: Product,
+      include: [ 'id', 'product_name', 'price', 'stock', 'category_id']
+    }],
+  })
+  .then (tagData => {
   if (!tagData) {
     res.status(404).json({ message: "No tag found with that id!" });
     return;
@@ -43,8 +49,8 @@ router.post('/', (req, res) => {
   // create a new tag
   Tag.create({
     tag_name: req.body.tag_name,
-  });
-  then (tagData => {
+  })
+  .then (tagData => {
   res.status(200).json(tagData);
   })
   .catch (err => {
@@ -60,8 +66,8 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-  });
-  then (tagData => {
+  })
+  .then (tagData => {
   if (!tagData) {
     res.status(404).json({ message: "No tag found with that id!" });
     return;
@@ -81,8 +87,8 @@ router.delete('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-  });
-  then (tagData => {
+  })
+  .then (tagData => {
   if (!tagData) {
     res.status(404).json({ message: "No tag found with that id!" });
     return;

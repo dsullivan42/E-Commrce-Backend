@@ -7,7 +7,10 @@ router.get('/', (req, res) => {
   // find all categories
   // be sure to include its associated Products
   Category.findAll({
-    include: [{ model: Product }],
+    include: [{ 
+      model: Product,
+      attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+    }],
   })
   .then((categoryData) => {
     res.json(categoryData);
@@ -23,9 +26,12 @@ router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
     Category.findByPk(req.params.id, {
-      include: [{ model: Product }],
-    });
-    then(categoryData => {
+      include: [{ 
+        model: Product,
+        attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+      }],
+    })
+    .then(categoryData => {
       if (!categoryData) {
         res.status(404).json({ message: 'No category found with that id!' });
         return;
@@ -43,8 +49,8 @@ router.post('/', (req, res) => {
   // create a new category
     Category.create({
       category_name: req.body.category_name,
-    });
-    then(categoryData => {
+    })
+    .then(categoryData => {
       res.json(categoryData);
     }).catch(err => {
       console.log(err);
@@ -59,8 +65,8 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id,
     },
-  });
-  then (categoryData => {
+  })
+  .then (categoryData => {
     if (!categoryData) {
       res.status(404).json({ message: 'No category found with that id!' });
       return;
@@ -80,8 +86,8 @@ router.delete('/:id', (req, res) => {
       where: {
         id: req.params.id,
       },
-    });
-    then(categoryData => {
+    })
+    .then(categoryData => {
       if (!categoryData) {
         res.status(404).json({ message: 'No category found with that id!' });
         return;
